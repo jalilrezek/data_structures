@@ -1,0 +1,512 @@
+package hw6.bst;
+
+import hw6.OrderedMap;
+import java.util.Iterator;
+import java.util.Stack;
+
+// I think all the core operations are O(lg n) because they all rely on recursive calls. So,
+// they are only looking at the right node based on its size (comparisons, if less, go left, if
+// more, go right etc)
+
+/**
+ * Map implemented as an AVL Tree.
+ *
+ * @param <K> Type for keys.
+ * @param <V> Type for values.
+ */
+public class AvlTreeMap<K extends Comparable<K>, V> implements OrderedMap<K, V> {
+
+  /*** Do not change variable name of 'root'. ***/
+  private Node<K, V> root;
+  private int size; // I added this
+
+  private Node<K, V> rightRotation(Node<K, V> root) {
+    System.out.println("entered right rotation");
+    Node<K, V> child = root.left;
+
+    root.left = child.right;
+    child.right = root;
+
+    root.height = setHeight(root);
+    child.height = setHeight(child);
+
+    setBF(root);
+    setBF(child);
+
+    root = child;
+    return root;
+  }
+
+  private Node<K, V> leftRotation(Node <K, V> root) {
+    System.out.println("\nEntered left rotation\n");
+    Node<K, V> child = root.right;
+
+    System.out.println("leftRotation(). Root height: " + root.height + " root BF: " + root.bf + " child height: " + child.height + " child BF: " + child.bf);
+
+    System.out.println("leftRotation(). Node: " + root.key + " child: " + child.key);
+
+    if (child.left != null) {
+      System.out.println("Child.left.height: " + child.left.height + " child.left.bf: " + child.left.bf);
+    }
+    if (child.right != null) {
+      System.out.println("Child.right.height: " + child.right.height + " child.right.bf: " + child.right.bf);
+    }
+    root.right = child.left;
+    child.left = root; // achieves "rotation" to the left
+
+    root.height = setHeight(root);
+    child.height = setHeight(child);
+
+    setBF(root);
+    setBF(child);
+
+    root = child;
+//    System.out.println("leftRotation(). New root: " + root.key + " new left child: " + root.left.key + " new right child: " + root.right.key);
+
+    return root;
+  }
+
+  private Node<K,V> RLRotation(Node<K, V> root) {
+    root.right = rightRotation(root.right);
+    return leftRotation(root); // would be called as "node = RLRotation(node)"
+  }
+
+  private Node<K,V> LRRotation(Node<K, V> root) {
+    root.left = leftRotation(root.left);
+    return rightRotation(root);
+  }
+
+  private Node<K,V> checkRotationsHelper(Node<K,V> root, Node<K,V> child) {
+
+    if (root.left == null && root.right == null) { // it's a leaf, so it's balanced. Done.
+      return root;
+    } else if (root.left != null && root.right == null) { //
+      child = root.left;
+    } else if (root.left == null && root.right != null) {
+      child = root.right;
+    }
+
+    if (root.bf == -2 && (child.bf == -1 || child.bf == 0)) {
+      return leftRotation(root);
+    } else if (root.bf == -2 && child.bf == 1) {
+      return RLRotation(root);
+    } else if (root.bf == 2 && (child.bf == -1 || child.bf == 0)) {
+      return LRRotation(root);
+    } else if ((root.bf == 2 && child.bf == 1)) {
+      return rightRotation(root);
+    } else { // no rotations needed
+      //  System.out.println("no rotations needed in check rotations");
+      return root;
+    }
+
+  }
+
+  // I need to update the balance factors, then check if rotations are needed, and then
+  // if a rotation is done, update the balance factors after the rotation is done.
+  private Node<K,V> checkRotations(Node<K, V> root, Node<K,V> child) {
+//    System.out.println("Entered check rotations. Node: " + root.key + " child: " + child.key);
+
+
+
+    // You need to know, in the case that both children are not null, which one you wanted to modify.
+    // that is why we need the "child" parameter, at least for insertions.
+
+    // But for removals, you could be looking at null nodes because you just removed the left or right
+    // child. In this case, do a check - if one of the children is null, check the other child instead.
+    // This is necessary for removals, since after removing a child, an imbalance may be caused;
+    // but since the node you just removed is null, you cannot check through that one anymore -
+    // rather you must check through the other one for any imbalance. If there is no other one, it's a leaf;
+    // and so it's balanced and we're done.
+
+    if (root.left == null && root.right == null) { // it's a leaf, so it's balanced. Done.
+      return root;
+    } else if (root.left != null && root.right == null) { //
+      child = root.left;
+    } else if (root.left == null && root.right != null) {
+      child = root.right;
+    } // else, both children are not null - and child is what it was passed in as, which is appropriate.
+    // after this conditional logic, child is definitely not null - if it was, we returned the root.
+
+    root.height = setHeight(root); // root is never null, unless maybe emptying out tree ... ?
+    child.height = setHeight(child);
+    setBF(root); // again, OK as long as root is never null, else guard against it like for child
+    setBF(child);
+
+
+    System.out.println("checkRotations(). Root height: " + root.height + " root BF: " + root.bf + " child height: " + child.height + " child BF: " + child.bf);
+    if (child.left != null) {
+      System.out.println("Child.left.height: " + child.left.height + " child.left.bf: " + child.left.bf);
+    }
+    if (child.right != null) {
+      System.out.println("Child.right.height: " + child.right.height + " child.right.bf: " + child.right.bf);
+
+    }
+
+   // int childHeight = setHeight(child); // guards against child being null.
+   // int childBF = 0;
+
+    /*if (child != null) {
+      child.height = childHeight; // when inserting, there's always a relevant child to check.
+      // but when removing, the child will ultimately be null at some point.
+      setBF(child); // child is not null, so must update its BF
+      childBF = child.bf; // can only do this if child is not null
+    } */
+
+    //child = checkRotationsHelper(child, child.left); // i don't know if there's any way to remember
+    //child = checkRotationsHelper(child, child.right); // which node of child to be concerned with.
+
+    //return checkRotationsHelper(root, child); // equivalent to saying
+    // "root = checkRotationsHelper(root, child)" and then returning that
+
+    boolean wasLeftChild = false;
+    boolean wasRightChild = false;
+
+    if (child.equals(root.right)) {
+      wasRightChild = true;
+    } else if (child.equals(root.left)) {
+      wasLeftChild = true;
+    }
+
+    child = checkRotationsHelper(child, child.right);
+    child = checkRotationsHelper(child, child.left); // repetitive, but I don't know if there's any
+    // way to clean this up. Use the booleans perhaps to tell which child it was.
+    // in general, I still have a lot of cleaning up to do regarding "checkRotationsHelper()."
+    // Do that, and see if a more elegant handling of this issue arises therefrom.
+
+    if (wasRightChild) {
+      root.right = child;
+    } else if (wasLeftChild) {
+      root.left = child;
+    }
+
+    System.out.println("\ncheckRotations() after checkRotationsHelper\n");
+
+    root.height = setHeight(root);
+    setBF(root);
+
+    System.out.println("Root: " + root.key + " root height: " + root.height + " root BF: " + root.bf);
+    System.out.println("Child: " + child.key);
+    if (child.left != null) {
+      System.out.println("Child.left.height: " + child.left.height + " child.left.bf: " + child.left.bf);
+    }
+    if (child.right != null) {
+      System.out.println("Child.right.height: " + child.right.height + " child.right.bf: " + child.right.bf);
+
+    }
+
+    if (root.bf == -2 && (child.bf == -1 || child.bf == 0)) {
+      return leftRotation(root);
+    } else if (root.bf == -2 && child.bf == 1) {
+      return RLRotation(root);
+    } else if (root.bf == 2 && (child.bf == -1 || child.bf == 0)) {
+      return LRRotation(root);
+    } else if ((root.bf == 2 && child.bf == 1)) {
+      return rightRotation(root);
+    } else { // no rotations needed
+      System.out.println("no rotations needed in check rotations");
+      System.out.println("root: " + root.key);
+      System.out.println("root's  child: " + child.key);
+      if (child == root.right) {
+        System.out.println("child is root's right");
+      } else if (child == root.left) {
+        System.out.println("child is root's left");
+      }
+      return root;
+    }
+
+  }
+
+  private int setHeight(Node<K,V> n) {
+    if (n == null) { // node is null. This happens when remove() calls setHeight() on subtreeRoot.child
+      return -1; // via checkRotations()
+    } else if (n.left == null && n.right != null) {
+      return n.right.height + 1;
+    } else if (n.left != null && n.right == null) {
+     // System.out.println("SetHeight() right null left not null. Left height: " + n.left.height);
+      return n.left.height + 1;
+    } else if (n.left == null && n.right == null) { // is a leaf
+      return 0;
+    } else { // both left and right are not null
+      return Math.max(n.left.height, n.right.height) + 1;
+    }
+  }
+
+  // Private helper of the same name as the public method.
+  // Insert given key and value into subtree rooted at given node;
+  // return changed subtree with a new node added.
+  private Node<K, V> insert(Node<K, V> n, K k, V v) throws IllegalArgumentException {
+
+    if (n == null) {
+      //System.out.println("In insert() reached end of recursion");
+      return new Node<>(k, v); // height and bf initialized to zero
+    }
+    // the code construct I am imagining for recursive call.
+      /* if (n.next != null) {
+        updateHeight(n.next);
+       }
+       n.height++; // as it unfolds, it will reach these statements going back up the tree.
+    * */
+
+
+    int cmp = k.compareTo(n.key);
+    if (cmp < 0) {
+     // System.out.println("In insert() going to recurse left");
+      n.left = insert(n.left, k, v);
+     // n.height++; // as recursion unfolds, this statement is reached going back up the tree. Same if right
+     // setBF(n); // update balance factor with the new child's height. The child was updated in the preceding
+      n = checkRotations(n, n.left);
+    } else if (cmp > 0) { // recursive call, so this should work.
+     // System.out.println("insertedKey: " + k + " key of currNode: " + n.key + " Cmp: " + cmp + " In insert() going to recurse right");
+      n.right = insert(n.right, k, v);
+     // n.height++;
+     // setBF(n);
+      n = checkRotations(n, n.right); // if we are here, n.right was set equal to insert(...)
+      // which means we recursed to the right which means it is the right child we must check.
+    } else {
+      throw new IllegalArgumentException("duplicate key " + k);
+    }
+    //updateHeightsAndBFs(n, k);
+   // n = leftRotation(n);
+   // System.out.println("end of insert(). Root height: " + n.height + " root bf: " + n.bf);
+
+    return n;
+  }
+
+  @Override
+  public void insert(K k, V v) throws IllegalArgumentException {
+    // TODO Implement Me!
+    if (k == null) {
+      throw new IllegalArgumentException("cannot handle null key");
+    }
+    root = insert(root, k, v);
+    size++;
+  }
+
+  @Override
+  public V remove(K k) throws IllegalArgumentException {
+    // TODO Implement Me!
+    Node<K, V> node = findForSure(k);
+    V value = node.value;
+    root = remove(root, node);
+    size--;
+    return value;
+  }
+
+  // Remove node with given key from subtree rooted at given node;
+  // Return changed subtree with given key missing.
+  private Node<K, V> remove(Node<K, V> subtreeRoot, Node<K, V> toRemove) {
+    System.out.println("remove(). subtreeRoot: " + subtreeRoot.key + " to remove: " + toRemove.key);
+    int cmp = subtreeRoot.key.compareTo(toRemove.key);
+    if (cmp == 0) {
+      return remove(subtreeRoot);
+    } else if (cmp > 0) {
+      subtreeRoot.left = remove(subtreeRoot.left, toRemove);
+      subtreeRoot = checkRotations(subtreeRoot, subtreeRoot.left);
+      //System.out.println("leaving from here");
+    } else {
+      subtreeRoot.right = remove(subtreeRoot.right, toRemove);
+      subtreeRoot = checkRotations(subtreeRoot, subtreeRoot.right);
+      System.out.println("\nleaving conditionals of remove(node, node) from cmp < 0");
+
+    }
+
+    //System.out.println("\nremove(subtreeRoot, toRemove).\n ");
+    //System.out.println("subtreeRoot: " + subtreeRoot.key);
+//    System.out.println("right child: " + subtreeRoot.right.key);
+
+    return subtreeRoot;
+  }
+
+  // Remove given node and return the remaining tree (structural change).
+  private Node<K, V> remove(Node<K, V> node) {
+    // Easy if the node has 0 or 1 child.
+    if (node.right == null) {
+      return node.left;
+    } else if (node.left == null) {
+      return node.right;
+    }
+
+    // If it has two children, find the predecessor (max in left subtree),
+    Node<K, V> toReplaceWith = max(node);
+    // then copy its data to the given node (value change),
+    node.key = toReplaceWith.key;
+    node.value = toReplaceWith.value;
+    // then remove the predecessor node (structural change).
+    // toReplaceWith is "toRemove" in remove(subtreeRoot, toReplaceWith) function
+    node.left = remove(node.left, toReplaceWith); // apply recursive function to the node's left,
+    // because the node becomes max(node) (greatest in left subtree), meaning the original
+    // node that was greatest in left subtree must be removed cuz it is now moved to where the
+    // node we're removing to begin with, was.
+    // The formula is applied to node.left because the greatest node in left subtree is in left
+    // subtree.
+    // It will return a left subtree with the necessary update, that the formerly greatest-node
+    // in the left subtree is removed, with any structural changes needed having been applied by remove().
+
+    return node;
+  }
+
+  // Return a node with maximum key in subtree rooted at given node.
+  private Node<K, V> max(Node<K, V> node) {
+    Node<K, V> curr = node.left;
+    while (curr.right != null) {
+      curr = curr.right;
+    }
+    return curr;
+  }
+
+
+  @Override
+  public void put(K k, V v) throws IllegalArgumentException {
+    // TODO Implement Me!
+    Node<K, V> n = findForSure(k);
+    n.value = v;
+  }
+
+  // Return node for given key,
+  // throw an exception if the key is not in the tree.
+  private Node<K, V> findForSure(K k) {
+    Node<K, V> n = find(k);
+    if (n == null) {
+      throw new IllegalArgumentException("cannot find key " + k);
+    }
+    return n;
+  }
+
+  @Override
+  public V get(K k) throws IllegalArgumentException {
+    // TODO Implement Me!
+    Node<K, V> n = findForSure(k);
+    return n.value;
+  }
+
+  @Override
+  public boolean has(K k) {
+    // TODO Implement Me!
+    if (k == null) {
+      return false;
+    }
+    return find(k) != null;
+  }
+
+  @Override
+  public int size() {
+    // TODO Implement Me!
+    return size;
+  }
+
+  // Return node for given key.
+  private Node<K, V> find(K k) {
+    if (k == null) {
+      throw new IllegalArgumentException("cannot handle null key");
+    }
+    Node<K, V> n = root;
+    while (n != null) {
+      int cmp = k.compareTo(n.key);
+      if (cmp < 0) {
+        n = n.left;
+      } else if (cmp > 0) {
+        n = n.right;
+      } else {
+        return n;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public Iterator<K> iterator() {
+    // TODO Implement Me!
+    return new InorderIterator();
+  }
+
+  /*** Do not change this function's name or modify its code. ***/
+  @Override
+  public String toString() {
+    return BinaryTreePrinter.printBinaryTree(root);
+  }
+
+  private void setBF(Node<K,V> n) {
+    if (n.left == null && n.right != null) {
+      n.bf = -1 - n.right.height; // height of null is -1
+    } else if (n.left != null && n.right == null) {
+      n.bf = n.left.height - (-1);
+    } else if (n.left == null && n.right == null) { // is a leaf
+      n.bf = 0;
+    } else {
+      n.bf = n.left.height - n.right.height;
+    }
+  }
+
+  /**
+   * Feel free to add whatever you want to the Node class (e.g. new fields).
+   * Just avoid changing any existing names, deleting any existing variables,
+   * or modifying the overriding methods.
+   *
+   * <p>Inner node class, each holds a key (which is what we sort the
+   * BST by) as well as a value. We don't need a parent pointer as
+   * long as we use recursive insert/remove helpers.</p>
+   **/
+  private static class Node<K, V> implements BinaryTreeNode {
+    Node<K, V> left;
+    Node<K, V> right;
+    K key;
+    V value;
+
+    int height = 0;
+
+    int bf = 0;
+
+    // Constructor to make node creation easier to read.
+    Node(K k, V v) {
+      // left and right default to null
+      key = k;
+      value = v;
+    }
+
+    @Override
+    public String toString() {
+      return key + ":" + value;
+    }
+
+    @Override
+    public BinaryTreeNode getLeftChild() {
+      return left;
+    }
+
+    @Override
+    public BinaryTreeNode getRightChild() {
+      return right;
+    }
+
+  }
+
+  private class InorderIterator implements Iterator<K> {
+    private final Stack<Node<K, V>> stack;
+
+    InorderIterator() {
+      stack = new Stack<>();
+      pushLeft(root);
+    }
+
+    private void pushLeft(Node<K, V> curr) {
+      while (curr != null) {
+        stack.push(curr);
+        curr = curr.left;
+      }
+    }
+
+    @Override
+    public boolean hasNext() {
+      return !stack.isEmpty();
+    }
+
+    @Override
+    public K next() {
+      Node<K, V> top = stack.pop();
+      pushLeft(top.right);
+      return top.key;
+    }
+  }
+
+
+}

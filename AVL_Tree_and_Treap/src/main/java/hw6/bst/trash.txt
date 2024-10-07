@@ -1,0 +1,194 @@
+  private void updateHeightsAndBFs(Node<K, V> n, K insertedVal) {
+    // if tried to insert duplicate key, exception is thrown and program ends.
+    // Likewise, if key is null.
+    // so, if this function is reached, a new, valid key must have been added, and we do indeed
+    // have some heights to change.
+
+    n.height++;
+
+    int cmp = insertedVal.compareTo(n.key);
+
+    if (cmp < 0) { // there is a node to the left, which may or may not be the newly inserted one,
+      n.bf = n.left.height + 1 - n.right.height; // but is def not null
+      updateHeightsAndBFs(n.left, insertedVal);
+    } else if (cmp > 0) {
+      n.bf = n.right.height + 1 - n.right.height;
+      updateHeightsAndBFs(n.right, insertedVal);
+    } // else, cmp == 0 and we've reached the newly inserted node - its height is already updated
+    // above. And, having just been inserted, its bf is 0, as initialized. So, we're done.
+
+  }
+
+  In checkRotations, trying to check for null node, if so, compare with the other subtree to check for
+  a need to rotate. Then I found a much more elegant way. The attempt below is not complete.
+
+   //if (child != null) {
+       // System.out.println("in check rotations, child is not null");
+      //}
+
+      /*if (root.left == null && root.right == null) {
+        return root;
+      } else if (root.left != null && root.right == null) { // checking left child
+        Node<K,V> child = root.left;
+      } else if (root.left == null && root.right != null) {
+
+      }
+
+      if (checkingLeft) { // checking left child
+        Node<K,V> child = root.left;
+      } else { // checking right child
+        Node<K, V> child = root.right;
+      } */
+
+      @Test
+        public void insertRightRotationNodeHasOneChild() {
+          map.insert("M", "a");
+          map.insert("D", "b");
+          map.insert("T", "c");
+          map.insert("Da", "d");
+
+          String[] expected = new String[]{ // not sure if nulls should be there but looks similar to
+                  "B:b\n" + // online tool
+                          "A:a C:c\n" +
+                          "null null null D:d"
+          };
+
+          assertEquals((String.join("\n", expected) + "\n"), map.toString());
+
+        }
+
+
+ /*private Node<K,V> checkRotationsHelper(Node<K,V> root, Node<K,V> child) {
+
+    if (is_leaf(root)) {
+      return root;
+    } else {
+      child = preliminaryChecks(root, child);
+    }
+
+    if (root.bf == -2 && (child.bf == -1 || child.bf == 0)) {
+      return leftRotation(root);
+    } else if (root.bf == -2 && child.bf == 1) {
+      return rlRotation(root);
+    } else if (root.bf == 2 && (child.bf == -1 || child.bf == 0)) {
+      return lrRotation(root);
+    } else if ((root.bf == 2 && child.bf == 1)) {
+      return rightRotation(root);
+    } else { // no rotations needed
+      //  System.out.println("no rotations needed in check rotations");
+      return root;
+    }
+
+  } */
+
+  // I need to update the balance factors, then check if rotations are needed, and then
+    // if a rotation is done, update the balance factors after the rotation is done.
+    /*private Node<K,V> screenForRotations(Node<K, V> root, Node<K,V> child) {
+      //    System.out.println("Entered check rotations. Node: " + root.key + " child: " + child.key);
+
+      // You need to know, in the case that both children are not null, which one you wanted to modify.
+      // that is why we need the "child" parameter, at least for insertions.
+
+      // But for removals, you could be looking at null nodes because you just removed the left or right
+      // child. In this case, do a check - if one of the children is null, check the other child instead.
+      // This is necessary for removals, since after removing a child, an imbalance may be caused;
+      // but since the node you just removed is null, you cannot check through that one anymore -
+      // rather you must check through the other one for any imbalance. If there is no other one, it's a leaf;
+      // and so it's balanced and we're done.
+
+      // conditions that mean don't need to check: root is null; root is a leaf (must be balanced cuz no children);
+      // or its two children are the same height. But to check the childrens' heights, must ensure they aren't null.
+      // Therefore, first check if it has one child only. if so, use that child? No.
+      // If it has two children, check if their heights are equal. If so, use the root.
+      // If it has two children and heights are not equal, use the one with the greater height.
+
+      if (root == null) return null; // for removals, when running checkRotations on the updated child, that is,
+      // checkRotations(child, child.child), the child (first param) could be null.
+
+      if (is_leaf(root)) {
+        return root;
+      } else { // it has a child to check.
+        child = preliminaryChecks(root, child);
+      }
+
+      setAttributes(root, child);
+
+      //child = checkRotationsHelper(child, child.left); // i don't know if there's any way to remember
+      //child = checkRotationsHelper(child, child.right); // which node of child to be concerned with.
+
+      //return checkRotationsHelper(root, child); // equivalent to saying
+      // "root = checkRotationsHelper(root, child)" and then returning that
+
+      boolean wasLeftChild = false;
+      boolean wasRightChild = false;
+
+      if (child.equals(root.right)) {
+        wasRightChild = true;
+      } else if (child.equals(root.left)) {
+        wasLeftChild = true;
+      }
+
+      child = checkRotationsHelper(child, child.right);
+      child = checkRotationsHelper(child, child.left); // repetitive, but I don't know if there's any
+      // way to clean this up. Use the booleans perhaps to tell which child it was.
+      // in general, I still have a lot of cleaning up to do regarding "checkRotationsHelper()."
+      // Do that, and see if a more elegant handling of this issue arises therefrom.
+
+      if (wasRightChild) {
+        root.right = child;
+      } else if (wasLeftChild) {
+        root.left = child;
+      }
+
+      System.out.println("\ncheckRotations() after checkRotationsHelper\n");
+
+      root.height = setHeight(root);
+      setBF(root);
+
+      System.out.println("Root: " + root.key + " root height: " + root.height + " root BF: " + root.bf);
+      System.out.println("Child: " + child.key);
+      if (child.left != null) {
+        System.out.println("Child.left.height: " + child.left.height + " child.left.bf: " + child.left.bf);
+      }
+      if (child.right != null) {
+        System.out.println("Child.right.height: " + child.right.height + " child.right.bf: " + child.right.bf);
+
+      }
+
+      if (root.bf == -2 && (child.bf == -1 || child.bf == 0)) {
+        return leftRotation(root);
+      } else if (root.bf == -2 && child.bf == 1) {
+        return rlRotation(root);
+      } else if (root.bf == 2 && (child.bf == -1 || child.bf == 0)) {
+        return lrRotation(root);
+      } else if ((root.bf == 2 && child.bf == 1)) {
+        return rightRotation(root);
+      } else { // no rotations needed
+        System.out.println("no rotations needed in check rotations");
+        System.out.println("root: " + root.key);
+        System.out.println("root's  child: " + child.key);
+        if (child == root.right) {
+          System.out.println("child is root's right");
+        } else if (child == root.left) {
+          System.out.println("child is root's left");
+        }
+        return root;
+      }
+
+    } */
+
+    The random() values determined when a rotation would occur (because it is a min heap). So if I used a particular
+    seed that produced X, 2X, 3X, -X for positive X, then I will not be able to generate a rotation
+    until having inserted at least four elements. By that time, it may be doing two rotations, not just one.
+    So, it was hard to write a test that would test just one rotation at a time. I had to find the right seed value
+    to cause that to happen based on the randomly generated numbers.
+
+    Another difficulty was in trying to generate just one rotation from removing a node with two children. This is reflected in the
+    design of the test function removeNodeWithTwoChildrenCausesOneLeftThenOneRightRotation(). At first, I thought I could
+    simply form a tree of the following form:
+
+    (root Y with two children)
+
+    Then, I thought I could remove the root, and cause just one rotation. This would be a valid case to test in the AVL Tree.
+    But, with the Treap, there would always be at least two rotations when removing a node with two children, because the
+    removed node must be rotated down two levels to become a leaf.
