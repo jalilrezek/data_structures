@@ -1,0 +1,254 @@
+# Discussion
+
+JdkHashMap
+
+# Run complete. Total time: 00:06:30
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark                                                                                (fileName)  Mode  Cnt           Score   Error   Units
+JmhRuntimeTest.buildSearchEngine                                                         apache.txt  avgt    2         129.777           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      apache.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             apache.txt  avgt    2        1188.945          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        apache.txt  avgt    2   170979450.798            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         apache.txt  avgt    2           0.614          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    apache.txt  avgt    2       88206.338            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           apache.txt  avgt    2          38.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         apache.txt  avgt    2   625934336.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              apache.txt  avgt    2   121346088.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            apache.txt  avgt    2         246.500              ms
+JmhRuntimeTest.buildSearchEngine                                                            jhu.txt  avgt    2           0.149           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                         jhu.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                                jhu.txt  avgt    2        1876.708          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                           jhu.txt  avgt    2      309174.864            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                            jhu.txt  avgt    2           0.104          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                       jhu.txt  avgt    2          17.068            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                              jhu.txt  avgt    2         180.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                            jhu.txt  avgt    2   219611136.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                                 jhu.txt  avgt    2    27800828.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                               jhu.txt  avgt    2          70.000              ms
+JmhRuntimeTest.buildSearchEngine                                                         joanne.txt  avgt    2           0.055           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      joanne.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             joanne.txt  avgt    2        2017.570          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        joanne.txt  avgt    2      124004.978            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         joanne.txt  avgt    2           0.161          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    joanne.txt  avgt    2           9.904            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           joanne.txt  avgt    2         234.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         joanne.txt  avgt    2   187236352.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              joanne.txt  avgt    2    28084032.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            joanne.txt  avgt    2          74.000              ms
+JmhRuntimeTest.buildSearchEngine                                                         newegg.txt  avgt    2          64.607           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      newegg.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             newegg.txt  avgt    2        1311.041          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        newegg.txt  avgt    2    93901672.052            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         newegg.txt  avgt    2          15.301          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    newegg.txt  avgt    2     1095887.716            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           newegg.txt  avgt    2          55.000          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         newegg.txt  avgt    2   483590144.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              newegg.txt  avgt    2    71800340.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            newegg.txt  avgt    2         176.000              ms
+JmhRuntimeTest.buildSearchEngine                                                      random164.txt  avgt    2         454.758           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                   random164.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'non-profiled_nmethods'       random164.txt  avgt    2           0.001          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'non-profiled_nmethods'.norm  random164.txt  avgt    2         704.000            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'profiled_nmethods'           random164.txt  avgt    2           0.006          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'profiled_nmethods'.norm      random164.txt  avgt    2        3146.372            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                          random164.txt  avgt    2         705.619          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                     random164.txt  avgt    2   355313914.941            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Old_Gen                             random164.txt  avgt    2         131.112          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Old_Gen.norm                        random164.txt  avgt    2    66034384.443            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                      random164.txt  avgt    2          20.209          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                 random164.txt  avgt    2    10174917.312            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                        random164.txt  avgt    2          55.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                      random164.txt  avgt    2  1209991168.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                           random164.txt  avgt    2   609640776.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                         random164.txt  avgt    2        1355.500              ms
+JmhRuntimeTest.buildSearchEngine                                                           urls.txt  avgt    2           0.017           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                        urls.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                               urls.txt  avgt    2        1208.016          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                          urls.txt  avgt    2       22800.917            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                           urls.txt  avgt    2           0.012          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                      urls.txt  avgt    2           0.220            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                             urls.txt  avgt    2         170.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                           urls.txt  avgt    2   159285248.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                                urls.txt  avgt    2    26907252.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                              urls.txt  avgt    2          50.500              ms
+
+Process finished with exit code 0
+
+
+
+
+
+OpenAddressingHashMap
+
+# Run complete. Total time: 00:06:31
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark                                                                                (fileName)  Mode  Cnt           Score   Error   Units
+JmhRuntimeTest.buildSearchEngine                                                         apache.txt  avgt    2         126.862           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      apache.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             apache.txt  avgt    2        1213.877          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        apache.txt  avgt    2   170640645.833            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         apache.txt  avgt    2           0.669          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    apache.txt  avgt    2       94013.192            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           apache.txt  avgt    2          39.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         apache.txt  avgt    2   625999872.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              apache.txt  avgt    2   122608312.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            apache.txt  avgt    2         235.500              ms
+JmhRuntimeTest.buildSearchEngine                                                            jhu.txt  avgt    2           0.163           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                         jhu.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                                jhu.txt  avgt    2        1703.109          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                           jhu.txt  avgt    2      307914.361            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                            jhu.txt  avgt    2           0.164          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                       jhu.txt  avgt    2          29.643            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                              jhu.txt  avgt    2         198.000          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                            jhu.txt  avgt    2   187203584.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                                 jhu.txt  avgt    2    27760116.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                               jhu.txt  avgt    2          65.000              ms
+JmhRuntimeTest.buildSearchEngine                                                         joanne.txt  avgt    2           0.058           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      joanne.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             joanne.txt  avgt    2        1914.075          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        joanne.txt  avgt    2      123873.595            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         joanne.txt  avgt    2           0.134          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    joanne.txt  avgt    2           8.696            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           joanne.txt  avgt    2         222.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         joanne.txt  avgt    2   187236352.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              joanne.txt  avgt    2    28082364.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            joanne.txt  avgt    2          70.500              ms
+JmhRuntimeTest.buildSearchEngine                                                         newegg.txt  avgt    2          94.853           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      newegg.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             newegg.txt  avgt    2         888.464          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        newegg.txt  avgt    2    93326067.679            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         newegg.txt  avgt    2           0.434          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    newegg.txt  avgt    2       45561.927            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           newegg.txt  avgt    2          35.000          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         newegg.txt  avgt    2   508624896.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              newegg.txt  avgt    2    68872952.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            newegg.txt  avgt    2         122.000              ms
+JmhRuntimeTest.buildSearchEngine                                                      random164.txt  avgt    2         538.937           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                   random164.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'non-profiled_nmethods'       random164.txt  avgt    2           0.001          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'non-profiled_nmethods'.norm  random164.txt  avgt    2         882.526            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'profiled_nmethods'           random164.txt  avgt    2           0.006          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'profiled_nmethods'.norm      random164.txt  avgt    2        3816.421            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                          random164.txt  avgt    2         592.844          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                     random164.txt  avgt    2   353811617.684            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Old_Gen                             random164.txt  avgt    2         114.974          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Old_Gen.norm                        random164.txt  avgt    2    68640336.842            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                      random164.txt  avgt    2          12.551          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                 random164.txt  avgt    2     7491799.579            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                        random164.txt  avgt    2          50.000          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                      random164.txt  avgt    2  1259274240.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                           random164.txt  avgt    2   644327624.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                         random164.txt  avgt    2        1399.000              ms
+JmhRuntimeTest.buildSearchEngine                                                           urls.txt  avgt    2           0.017           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                        urls.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                               urls.txt  avgt    2        1234.012          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                          urls.txt  avgt    2       22809.754            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                           urls.txt  avgt    2           0.012          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                      urls.txt  avgt    2           0.219            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                             urls.txt  avgt    2         174.000          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                           urls.txt  avgt    2   159285248.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                                urls.txt  avgt    2    27035492.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                              urls.txt  avgt    2          51.500              ms
+
+Process finished with exit code 0
+
+
+
+
+
+
+
+ChainingHashMap
+
+
+# Run complete. Total time: 00:06:32
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark                                                                                (fileName)  Mode  Cnt           Score   Error   Units
+JmhRuntimeTest.buildSearchEngine                                                         apache.txt  avgt    2         168.872           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      apache.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             apache.txt  avgt    2         950.584          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        apache.txt  avgt    2   177822785.725            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         apache.txt  avgt    2          14.895          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    apache.txt  avgt    2     2783818.656            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           apache.txt  avgt    2          26.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         apache.txt  avgt    2   728629248.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              apache.txt  avgt    2   150138200.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            apache.txt  avgt    2         238.500              ms
+JmhRuntimeTest.buildSearchEngine                                                            jhu.txt  avgt    2           0.176           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                         jhu.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                                jhu.txt  avgt    2        1694.958          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                           jhu.txt  avgt    2      330272.571            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                            jhu.txt  avgt    2           0.308          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                       jhu.txt  avgt    2          60.001            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                              jhu.txt  avgt    2         197.000          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                            jhu.txt  avgt    2   187301888.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                                 jhu.txt  avgt    2    27650452.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                               jhu.txt  avgt    2          64.000              ms
+JmhRuntimeTest.buildSearchEngine                                                         joanne.txt  avgt    2           0.074           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      joanne.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             joanne.txt  avgt    2        2034.944          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        joanne.txt  avgt    2      167699.892            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         joanne.txt  avgt    2           0.404          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    joanne.txt  avgt    2          33.322            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           joanne.txt  avgt    2         236.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         joanne.txt  avgt    2   187400192.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              joanne.txt  avgt    2    28266888.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            joanne.txt  avgt    2          82.500              ms
+JmhRuntimeTest.buildSearchEngine                                                         newegg.txt  avgt    2          81.921           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                      newegg.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                             newegg.txt  avgt    2        1098.046          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                        newegg.txt  avgt    2    99679597.521            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                         newegg.txt  avgt    2           3.739          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                    newegg.txt  avgt    2      339422.285            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                           newegg.txt  avgt    2          41.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                         newegg.txt  avgt    2   526647296.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                              newegg.txt  avgt    2    92544528.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                            newegg.txt  avgt    2          85.500              ms
+JmhRuntimeTest.buildSearchEngine                                                      random164.txt  avgt    2         679.050           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                   random164.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'non-profiled_nmethods'       random164.txt  avgt    2           0.001          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'non-profiled_nmethods'.norm  random164.txt  avgt    2        1028.267            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'profiled_nmethods'           random164.txt  avgt    2           0.004          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.CodeHeap_'profiled_nmethods'.norm      random164.txt  avgt    2        3370.667            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                          random164.txt  avgt    2         532.739          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                     random164.txt  avgt    2   400870604.800            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Old_Gen                             random164.txt  avgt    2         143.398          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Old_Gen.norm                        random164.txt  avgt    2   107846041.600            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                      random164.txt  avgt    2          10.619          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                 random164.txt  avgt    2     7986653.867            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                        random164.txt  avgt    2          41.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                      random164.txt  avgt    2  1407123456.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                           random164.txt  avgt    2   686415800.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                         random164.txt  avgt    2        1394.500              ms
+JmhRuntimeTest.buildSearchEngine                                                           urls.txt  avgt    2           0.017           ms/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.alloc.rate                                        urls.txt  avgt    2             NaN          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space                               urls.txt  avgt    2        1222.049          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Eden_Space.norm                          urls.txt  avgt    2       23041.411            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space                           urls.txt  avgt    2           0.016          MB/sec
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.churn.G1_Survivor_Space.norm                      urls.txt  avgt    2           0.310            B/op
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.count                                             urls.txt  avgt    2         172.500          counts
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumCommittedAfterGc                           urls.txt  avgt    2   159514624.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.maximumUsedAfterGc                                urls.txt  avgt    2    27043732.000           bytes
+JmhRuntimeTest.buildSearchEngine:+c2k.gc.time                                              urls.txt  avgt    2          51.000              ms
+
+Process finished with exit code 0
+
+
