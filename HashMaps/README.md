@@ -1,3 +1,10 @@
+# Directions
+Please see the HashMap_Implementations directory for two separate HashMaps that I implemented (one using open-addressing and the other using chaining to resolve collision conflicts).
+
+The HashMap_Testing directory contains various files used in testing the performance of my implementations. I used the JMH Runtime and JUnit testing frameworks. 
+
+The results of testing the performances of my Open Addressing and Chaining HashMaps are discussed below.
+
 # Discussion
 Abbreviations:
 OAHM = OpenAddressingHashMap
